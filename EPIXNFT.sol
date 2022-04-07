@@ -24,13 +24,13 @@ contract EPIXNFT is ERC1155, Ownable {
         return _symbol;
     }
 
-    function mint(address userac, uint256 itemID, uint256 amount, bytes memory data) public onlyOwner
+    function mint(address to, uint256 itemID, uint256 price, bytes memory data) public onlyOwner
     {
-        _mint(userac, id, amount, data);
+        _mint(to, itemID, price, data);
     }
 
-    function mintBatch(address to, uint256[] memory ids, uint256[] memory amounts, bytes memory data) public onlyOwner
+    function mintBatch(address to, uint256[] memory ids, uint256[] memory price, bytes memory data) public onlyOwner
     {
-        _mintBatch(to, ids, amounts, data);
+        _mintBatch(to, itemID, price, data);
     }
 }
