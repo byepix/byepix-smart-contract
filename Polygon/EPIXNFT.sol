@@ -1,36 +1,46 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.4;
+pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
-import "@openzeppelin/contracts/ownership/Ownable.sol";
+import '@openzeppelin/contracts/token/ERC1155/ERC1155.sol';
+import '@openzeppelin/contracts/access/Ownable.sol';
 
+contract BYEPIXVL is Ownable, ERC1155 {
+    string private baseURI;
+    string public symbol;
+    string public name;
 
-contract EPIXNFT is ERC1155, Ownable {
+    mapping(uint => string) public itemURI;
 
-    string private _name;
+   constructor(string memory _name ,  string memory _symbol) ERC1155("") {
+    name = _name ;
+    symbol = _symbol;
+  }
+
+    function setURI(string memory _newuri) public onlyOwner {
+        _setURI(_newuri);
+    }
+
+    function setName(string memory _name) public onlyOwner {
+        name = _name;
+    }
     
-    string private _symbol;
-
-
-    function name() external view returns (string memory) {
-        return _name;
+    function setSymbol(string memory _symbol) public onlyOwner {
+        symbol = _symbol;
+    }
+       
+       
+    function mint(address _to, uint _id, uint _amount) external onlyOwner {
+    _mint(_to, _id, _amount, "");
     }
 
-    /**
-     * @dev Gets the token symbol.
-     * @return string representing the token symbol
-     */
-    function symbol() external view returns (string memory) {
-        return _symbol;
+    function burn(uint _id, uint _amount) external {
+     _burn(msg.sender, _id, _amount);
     }
 
-    function mint(address to, uint256 itemID, uint256 price, bytes memory data) public onlyOwner
-    {
-        _mint(to, itemID, price, data);
-    }
+    function setURI(uint _id, string memory _uri) external onlyOwner {
+    itemURI[_id] = _uri;
+    emit URI(_uri, _id);
+  }
 
-    function mintBatch(address to, uint256[] memory ids, uint256[] memory price, bytes memory data) public onlyOwner
-    {
-        _mintBatch(to, itemID, price, data);
-    }
+
 }
